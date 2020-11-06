@@ -5,13 +5,14 @@ import holoviews as hv
 import networkx as nx
 from holoviews import opts
 from bokeh.plotting import figure, output_file, save, show
+from bokeh.models import HoverTool
 
 hv.extension('bokeh')
-defaults = dict(width=500, height=500)
+defaults = dict(width=800, height=800)
 hv.opts.defaults(opts.EdgePaths(**defaults), opts.Graph(**defaults), opts.Nodes(**defaults))
 
 
-def directed_graph(df, name=None):
+def directed_graph(df, name=None, title=''):
     """
     Regresa una grafo dirigido para ver los patrones de las compras.
     
@@ -34,6 +35,9 @@ def directed_graph(df, name=None):
     name: str, default=None
         Nombre con el que se guardará un html de la gráfica, si es 
         None no se guardará el html.
+
+    title: str, default=''
+        Título para la gráfica
     """    
     
     source = [x[0] for x in df['items']]
@@ -51,11 +55,12 @@ def directed_graph(df, name=None):
     nodes_labels = hv.Labels(graph.nodes.data, ['x', 'y'], 'index')
     edges_labels = hv.Labels(weights_data, ['x', 'y'], 'weight')
 
-
+    hover = HoverTool(tooltips=[('Item', '@index_hover')])
     graph.opts(edge_line_width=3, edge_line_color='black', edge_alpha=0.3,
                node_color='#33D1FF', node_line_color='black', node_size=50,
                directed=True, arrowhead_length=0.04, node_alpha=0.5, 
-               edge_hover_line_color='#32E319', node_hover_color='#32E319')
+               edge_hover_line_color='#32E319', node_hover_color='#32E319',
+               title=title, tools=[hover])
 
     graph = (graph * nodes_labels.opts(text_font_size='8pt', text_color='black', 
                                        bgcolor='white', text_font_style='bold'))
@@ -68,7 +73,7 @@ def directed_graph(df, name=None):
     return graph
 
 
-def weighted_graph(df, name=None):
+def weighted_graph(df, name=None, title=''):
     """
     Regresa una grafo donde el grosor de las aristas es proporcional
     a su peso.
@@ -92,6 +97,9 @@ def weighted_graph(df, name=None):
     name: str, default=None
         Nombre con el que se guardará un html de la gráfica, si es 
         None no se guardará el html.
+
+    title: str, default=''
+        Título para la gráfica
     """
     
     source = [x[0] for x in df['items']]
@@ -121,10 +129,12 @@ def weighted_graph(df, name=None):
     nodes = hv.Nodes((x, y, node_indices, node_labels), vdims='Type')
     graph = hv.Graph(((source, target, 200*edge_weights), None, paths), vdims='Weight')
 
+    hover = HoverTool(tooltips=[('Item', '@index_hover')])
     graph.opts(edge_line_width='Weight', edge_line_color='black', edge_alpha=0.3,
                node_color='#33D1FF', node_line_color='black', node_size=50,
                directed=True, arrowhead_length=0.04, node_alpha=0.5, 
-               edge_hover_line_color='#32E319', node_hover_color='#32E319')
+               edge_hover_line_color='#32E319', node_hover_color='#32E319',
+               title=title, tools=[hover])
     
     weights_data = pd.DataFrame(columns=['x', 'y', 'weight'])
     for (path,weight) in zip(paths, edge_weights):
