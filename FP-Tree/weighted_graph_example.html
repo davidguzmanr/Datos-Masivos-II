@@ -1,0 +1,553 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Panel</title>
+      
+      
+        
+          
+        <style>
+            .json-formatter-row {
+                  font-family: monospace;
+                }
+                .json-formatter-row,
+                .json-formatter-row a,
+                .json-formatter-row a:hover {
+                  color: black;
+                  text-decoration: none;
+                }
+                .json-formatter-row .json-formatter-row {
+                  margin-left: 1rem;
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty {
+                  opacity: 0.5;
+                  margin-left: 1rem;
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty:after {
+                  display: none;
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-object:after {
+                  content: "No properties";
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-array:after {
+                  content: "[]";
+                }
+                .json-formatter-row .json-formatter-string,
+                .json-formatter-row .json-formatter-stringifiable {
+                  color: green;
+                  white-space: pre;
+                  word-wrap: break-word;
+                }
+                .json-formatter-row .json-formatter-number {
+                  color: blue;
+                }
+                .json-formatter-row .json-formatter-boolean {
+                  color: red;
+                }
+                .json-formatter-row .json-formatter-null {
+                  color: #855A00;
+                }
+                .json-formatter-row .json-formatter-undefined {
+                  color: #ca0b69;
+                }
+                .json-formatter-row .json-formatter-function {
+                  color: #FF20ED;
+                }
+                .json-formatter-row .json-formatter-date {
+                  background-color: rgba(0, 0, 0, 0.05);
+                }
+                .json-formatter-row .json-formatter-url {
+                  text-decoration: underline;
+                  color: blue;
+                  cursor: pointer;
+                }
+                .json-formatter-row .json-formatter-bracket {
+                  color: blue;
+                }
+                .json-formatter-row .json-formatter-key {
+                  color: #00008B;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-row .json-formatter-toggler-link {
+                  cursor: pointer;
+                }
+                .json-formatter-row .json-formatter-toggler {
+                  line-height: 1.2rem;
+                  font-size: 0.7rem;
+                  vertical-align: middle;
+                  opacity: 0.6;
+                  cursor: pointer;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-row .json-formatter-toggler:after {
+                  display: inline-block;
+                  transition: transform 100ms ease-in;
+                  content: "\25BA";
+                }
+                .json-formatter-row > a > .json-formatter-preview-text {
+                  opacity: 0;
+                  transition: opacity 0.15s ease-in;
+                  font-style: italic;
+                }
+                .json-formatter-row:hover > a > .json-formatter-preview-text {
+                  opacity: 0.6;
+                }
+                .json-formatter-row.json-formatter-open > .json-formatter-toggler-link .json-formatter-toggler:after {
+                  transform: rotate(90deg);
+                }
+                .json-formatter-row.json-formatter-open > .json-formatter-children:after {
+                  display: inline-block;
+                }
+                .json-formatter-row.json-formatter-open > a > .json-formatter-preview-text {
+                  display: none;
+                }
+                .json-formatter-row.json-formatter-open.json-formatter-empty:after {
+                  display: block;
+                }
+                .json-formatter-dark.json-formatter-row {
+                  font-family: monospace;
+                }
+                .json-formatter-dark.json-formatter-row,
+                .json-formatter-dark.json-formatter-row a,
+                .json-formatter-dark.json-formatter-row a:hover {
+                  color: white;
+                  text-decoration: none;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-row {
+                  margin-left: 1rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty {
+                  opacity: 0.5;
+                  margin-left: 1rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty:after {
+                  display: none;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-object:after {
+                  content: "No properties";
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-array:after {
+                  content: "[]";
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-string,
+                .json-formatter-dark.json-formatter-row .json-formatter-stringifiable {
+                  color: #31F031;
+                  white-space: pre;
+                  word-wrap: break-word;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-number {
+                  color: #66C2FF;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-boolean {
+                  color: #EC4242;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-null {
+                  color: #EEC97D;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-undefined {
+                  color: #ef8fbe;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-function {
+                  color: #FD48CB;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-date {
+                  background-color: rgba(255, 255, 255, 0.05);
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-url {
+                  text-decoration: underline;
+                  color: #027BFF;
+                  cursor: pointer;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-bracket {
+                  color: #9494FF;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-key {
+                  color: #23A0DB;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-toggler-link {
+                  cursor: pointer;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-toggler {
+                  line-height: 1.2rem;
+                  font-size: 0.7rem;
+                  vertical-align: middle;
+                  opacity: 0.6;
+                  cursor: pointer;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-toggler:after {
+                  display: inline-block;
+                  transition: transform 100ms ease-in;
+                  content: "\25BA";
+                }
+                .json-formatter-dark.json-formatter-row > a > .json-formatter-preview-text {
+                  opacity: 0;
+                  transition: opacity 0.15s ease-in;
+                  font-style: italic;
+                }
+                .json-formatter-dark.json-formatter-row:hover > a > .json-formatter-preview-text {
+                  opacity: 0.6;
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open > .json-formatter-toggler-link .json-formatter-toggler:after {
+                  transform: rotate(90deg);
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open > .json-formatter-children:after {
+                  display: inline-block;
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open > a > .json-formatter-preview-text {
+                  display: none;
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open.json-formatter-empty:after {
+                  display: block;
+                }
+
+        </style>
+        <style>
+            .codehilite .hll { background-color: #ffffcc }
+                .codehilite  { background: #f8f8f8; }
+                .codehilite .c { color: #408080; font-style: italic } /* Comment */
+                .codehilite .err { border: 1px solid #FF0000 } /* Error */
+                .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+                .codehilite .o { color: #666666 } /* Operator */
+                .codehilite .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+                .codehilite .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+                .codehilite .cp { color: #BC7A00 } /* Comment.Preproc */
+                .codehilite .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+                .codehilite .c1 { color: #408080; font-style: italic } /* Comment.Single */
+                .codehilite .cs { color: #408080; font-style: italic } /* Comment.Special */
+                .codehilite .gd { color: #A00000 } /* Generic.Deleted */
+                .codehilite .ge { font-style: italic } /* Generic.Emph */
+                .codehilite .gr { color: #FF0000 } /* Generic.Error */
+                .codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+                .codehilite .gi { color: #00A000 } /* Generic.Inserted */
+                .codehilite .go { color: #888888 } /* Generic.Output */
+                .codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+                .codehilite .gs { font-weight: bold } /* Generic.Strong */
+                .codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+                .codehilite .gt { color: #0044DD } /* Generic.Traceback */
+                .codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+                .codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+                .codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+                .codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+                .codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+                .codehilite .kt { color: #B00040 } /* Keyword.Type */
+                .codehilite .m { color: #666666 } /* Literal.Number */
+                .codehilite .s { color: #BA2121 } /* Literal.String */
+                .codehilite .na { color: #7D9029 } /* Name.Attribute */
+                .codehilite .nb { color: #008000 } /* Name.Builtin */
+                .codehilite .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+                .codehilite .no { color: #880000 } /* Name.Constant */
+                .codehilite .nd { color: #AA22FF } /* Name.Decorator */
+                .codehilite .ni { color: #999999; font-weight: bold } /* Name.Entity */
+                .codehilite .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+                .codehilite .nf { color: #0000FF } /* Name.Function */
+                .codehilite .nl { color: #A0A000 } /* Name.Label */
+                .codehilite .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+                .codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+                .codehilite .nv { color: #19177C } /* Name.Variable */
+                .codehilite .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+                .codehilite .w { color: #bbbbbb } /* Text.Whitespace */
+                .codehilite .mb { color: #666666 } /* Literal.Number.Bin */
+                .codehilite .mf { color: #666666 } /* Literal.Number.Float */
+                .codehilite .mh { color: #666666 } /* Literal.Number.Hex */
+                .codehilite .mi { color: #666666 } /* Literal.Number.Integer */
+                .codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+                .codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+                .codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+                .codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+                .codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+                .codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+                .codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+                .codehilite .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+                .codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+                .codehilite .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+                .codehilite .sx { color: #008000 } /* Literal.String.Other */
+                .codehilite .sr { color: #BB6688 } /* Literal.String.Regex */
+                .codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+                .codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+                .codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+                .codehilite .fm { color: #0000FF } /* Name.Function.Magic */
+                .codehilite .vc { color: #19177C } /* Name.Variable.Class */
+                .codehilite .vg { color: #19177C } /* Name.Variable.Global */
+                .codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+                .codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+                .codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+                .markdown h1 { margin-block-start: 0.34em }
+                .markdown h2 { margin-block-start: 0.42em }
+                .markdown h3 { margin-block-start: 0.5em }
+                .markdown h4 { margin-block-start: 0.67em }
+                .markdown h5 { margin-block-start: 0.84em }
+                .markdown h6 { margin-block-start: 1.17em }
+                .markdown ul { padding-inline-start: 2em }
+                .markdown ol { padding-inline-start: 2em }
+                .markdown strong { font-weight: 600 }
+                .markdown a { color: -webkit-link }
+                .markdown a { color: -moz-hyperlinkText }
+
+        </style>
+        <style>
+            table.panel-df {
+                    margin-left: auto;
+                    margin-right: auto;
+                    border: none;
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    color: black;
+                    font-size: 12px;
+                    table-layout: fixed;
+                    width: 100%;
+                }
+
+                .panel-df tr, th, td {
+                    text-align: right;
+                    vertical-align: middle;
+                    padding: 0.5em 0.5em !important;
+                    line-height: normal;
+                    white-space: normal;
+                    max-width: none;
+                    border: none;
+                }
+
+                .panel-df tbody {
+                    display: table-row-group;
+                    vertical-align: middle;
+                    border-color: inherit;
+                }
+
+                .panel-df tbody tr:nth-child(odd) {
+                    background: #f5f5f5;
+                }
+
+                .panel-df thead {
+                    border-bottom: 1px solid black;
+                    vertical-align: bottom;
+                }
+
+                .panel-df tr:hover {
+                    background: lightblue !important;
+                    cursor: pointer;
+                }
+
+        </style>
+        <style>
+            .widget-box {
+                	min-height: 20px;
+                	background-color: #f5f5f5;
+                	border: 1px solid #e3e3e3 !important;
+                	border-radius: 4px;
+                	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+                	box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+                	overflow-x: hidden;
+                	overflow-y: hidden;
+                }
+
+                .scrollable {
+                  overflow: scroll;
+                }
+
+                progress {
+                	appearance: none;
+                	-moz-appearance: none;
+                	-webkit-appearance: none;
+
+                	border: none;
+                	height: 20px;
+                	background-color: whiteSmoke;
+                	border-radius: 3px;
+                	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+                	color: royalblue;
+                	position: relative;
+                	margin: 0 0 1.5em;
+                }
+
+                progress[value]::-webkit-progress-bar {
+                	background-color: whiteSmoke;
+                	border-radius: 3px;
+                	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+                }
+
+                progress[value]::-webkit-progress-value {
+                	position: relative;
+
+                	background-size: 35px 20px, 100% 100%, 100% 100%;
+                	border-radius:3px;
+                }
+
+                progress.active:not([value])::before {
+                	background-position: 10%;
+                	animation-name: stripes;
+                	animation-duration: 3s;
+                	animation-timing-function: linear;
+                	animation-iteration-count: infinite;
+                }
+
+                progress[value]::-moz-progress-bar {
+                	background-size: 35px 20px, 100% 100%, 100% 100%;
+                	border-radius:3px;
+                }
+
+                progress:not([value])::-moz-progress-bar {
+                	border-radius:3px;
+                	background:
+                	linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.2) 33%, rgba(0, 0, 0, 0.2) 66%, transparent 66%) left/2.5em 1.5em;
+
+                }
+
+                progress.active:not([value])::-moz-progress-bar {
+                	background-position: 10%;
+                	animation-name: stripes;
+                	animation-duration: 3s;
+                	animation-timing-function: linear;
+                	animation-iteration-count: infinite;
+                }
+
+                progress.active:not([value])::-webkit-progress-bar {
+                	background-position: 10%;
+                	animation-name: stripes;
+                	animation-duration: 3s;
+                	animation-timing-function: linear;
+                	animation-iteration-count: infinite;
+                }
+
+                progress.primary[value]::-webkit-progress-value { background-color: #007bff; }
+                progress.primary:not([value])::before { background-color: #007bff; }
+                progress.primary:not([value])::-webkit-progress-bar { background-color: #007bff; }
+                progress.primary::-moz-progress-bar { background-color: #007bff; }
+
+                progress.secondary[value]::-webkit-progress-value { background-color: #6c757d; }
+                progress.secondary:not([value])::before { background-color: #6c757d; }
+                progress.secondary:not([value])::-webkit-progress-bar { background-color: #6c757d; }
+                progress.secondary::-moz-progress-bar { background-color: #6c757d; }
+
+                progress.success[value]::-webkit-progress-value { background-color: #28a745; }
+                progress.success:not([value])::before { background-color: #28a745; }
+                progress.success:not([value])::-webkit-progress-bar { background-color: #28a745; }
+                progress.success::-moz-progress-bar { background-color: #28a745; }
+
+                progress.danger[value]::-webkit-progress-value { background-color: #dc3545; }
+                progress.danger:not([value])::before { background-color: #dc3545; }
+                progress.danger:not([value])::-webkit-progress-bar { background-color: #dc3545; }
+                progress.danger::-moz-progress-bar { background-color: #dc3545; }
+
+                progress.warning[value]::-webkit-progress-value { background-color: #ffc107; }
+                progress.warning:not([value])::before { background-color: #ffc107; }
+                progress.warning:not([value])::-webkit-progress-bar { background-color: #ffc107; }
+                progress.warning::-moz-progress-bar { background-color: #ffc107; }
+
+                progress.info[value]::-webkit-progress-value { background-color: #17a2b8; }
+                progress.info:not([value])::before { background-color: #17a2b8; }
+                progress.info:not([value])::-webkit-progress-bar { background-color: #17a2b8; }
+                progress.info::-moz-progress-bar { background-color: #17a2b8; }
+
+                progress.light[value]::-webkit-progress-value { background-color: #f8f9fa; }
+                progress.light:not([value])::before { background-color: #f8f9fa; }
+                progress.light:not([value])::-webkit-progress-bar { background-color: #f8f9fa; }
+                progress.light::-moz-progress-bar { background-color: #f8f9fa; }
+
+                progress.dark[value]::-webkit-progress-value { background-color: #343a40; }
+                progress.dark:not([value])::-webkit-progress-bar { background-color: #343a40; }
+                progress.dark:not([value])::before { background-color: #343a40; }
+                progress.dark::-moz-progress-bar { background-color: #343a40; }
+
+                progress:not([value])::-webkit-progress-bar {
+                	border-radius: 3px;
+                	background:
+                	linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.2) 33%, rgba(0, 0, 0, 0.2) 66%, transparent 66%) left/2.5em 1.5em;
+                }
+                progress:not([value])::before {
+                	content:" ";
+                	position:absolute;
+                	height: 20px;
+                	top:0;
+                	left:0;
+                	right:0;
+                	bottom:0;
+                	border-radius: 3px;
+                	background:
+                	linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.2) 33%, rgba(0, 0, 0, 0.2) 66%, transparent 66%) left/2.5em 1.5em;
+                }
+
+                @keyframes stripes {
+                  from {background-position: 0%}
+                  to {background-position: 100%}
+                }
+        </style>
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" integrity="sha384-ufR9RFnRs6lniiaFvtJziE0YeidtAgBRH6ux2oUItHw5WTvE1zuk9uzhUU/FJXDp" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="2a685de2-1179-487d-9f67-b48b6201455f" data-root-id="8874"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="9263">
+          {"c04e87fd-0eda-4d18-a8f6-10125b7e490b":{"roots":{"references":[{"attributes":{"margin":[5,5,5,5],"name":"HSpacer25923","sizing_mode":"stretch_width"},"id":"8875","type":"Spacer"},{"attributes":{},"id":"8935","type":"NodesAndLinkedEdges"},{"attributes":{"margin":[5,5,5,5],"name":"HSpacer25924","sizing_mode":"stretch_width"},"id":"9065","type":"Spacer"},{"attributes":{"data_source":{"id":"8939"},"glyph":{"id":"8942"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"8943"},"selection_glyph":null,"view":{"id":"8945"}},"id":"8944","type":"GlyphRenderer"},{"attributes":{"align":null,"background_fill_color":"white","below":[{"id":"8888"}],"center":[{"id":"8891"},{"id":"8895"}],"left":[{"id":"8892"}],"margin":null,"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":800,"plot_width":800,"renderers":[{"id":"8926"},{"id":"8944"},{"id":"8951"}],"sizing_mode":"fixed","title":{"id":"8880"},"toolbar":{"id":"8902"},"x_range":{"id":"8876"},"x_scale":{"id":"8884"},"y_range":{"id":"8877"},"y_scale":{"id":"8886"}},"id":"8879","subtype":"Figure","type":"Plot"},{"attributes":{"line_alpha":{"value":0.3},"line_color":{"value":"#32E319"},"line_width":{"field":"edge_line_width"},"xs":{"field":"xs"},"ys":{"field":"ys"}},"id":"8923","type":"MultiLine"},{"attributes":{},"id":"8963","type":"Selection"},{"attributes":{},"id":"8896","type":"SaveTool"},{"attributes":{"source":{"id":"8939"}},"id":"8945","type":"CDSView"},{"attributes":{},"id":"8909","type":"BasicTickFormatter"},{"attributes":{"text":{"field":"index"},"text_align":"center","text_baseline":"middle","text_color":{"value":"black"},"text_font_size":{"value":"8pt"},"text_font_style":"bold","x":{"field":"x"},"y":{"field":"y"}},"id":"8942","type":"Text"},{"attributes":{"text":""},"id":"8880","type":"Title"},{"attributes":{"bottom_units":"screen","fill_alpha":0.5,"fill_color":"lightgrey","left_units":"screen","level":"overlay","line_alpha":1.0,"line_color":"black","line_dash":[4,4],"line_width":2,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"8901","type":"BoxAnnotation"},{"attributes":{"children":[{"id":"8875"},{"id":"8879"},{"id":"9065"}],"margin":[0,0,0,0],"name":"Row25919","tags":["embedded"]},"id":"8874","type":"Row"},{"attributes":{},"id":"8893","type":"BasicTicker"},{"attributes":{},"id":"8962","type":"UnionRenderers"},{"attributes":{"text":{"field":"index"},"text_align":"center","text_alpha":{"value":0.1},"text_baseline":"middle","text_color":{"value":"black"},"text_font_size":{"value":"8pt"},"text_font_style":"bold","x":{"field":"x"},"y":{"field":"y"}},"id":"8943","type":"Text"},{"attributes":{},"id":"8900","type":"ResetTool"},{"attributes":{"axis":{"id":"8892"},"dimension":1,"grid_line_color":null,"ticker":null},"id":"8895","type":"Grid"},{"attributes":{"fill_alpha":{"value":0.2},"fill_color":{"value":"#30a2da"},"line_alpha":{"value":0.2},"size":{"units":"screen","value":50}},"id":"8917","type":"Circle"},{"attributes":{},"id":"8889","type":"BasicTicker"},{"attributes":{},"id":"8940","type":"Selection"},{"attributes":{"fill_alpha":{"value":0.5},"fill_color":{"value":"limegreen"},"line_alpha":{"value":0.5},"size":{"units":"screen","value":50}},"id":"8918","type":"Circle"},{"attributes":{"axis":{"id":"8888"},"grid_line_color":null,"ticker":null},"id":"8891","type":"Grid"},{"attributes":{"source":{"id":"8913"}},"id":"8920","type":"CDSView"},{"attributes":{},"id":"8964","type":"UnionRenderers"},{"attributes":{"graph_layout":{"0":[1.0,0.0],"1":[0.6234898018587336,0.7818314824680298],"2":[-0.22252093395631434,0.9749279121818236],"3":[-0.900968867902419,0.43388373911755823],"4":[-0.9009688679024191,-0.433883739117558],"5":[-0.2225209339563146,-0.9749279121818236],"6":[0.6234898018587334,-0.7818314824680299]}},"id":"8915","type":"StaticLayoutProvider"},{"attributes":{},"id":"8911","type":"BasicTickFormatter"},{"attributes":{"data":{"weight":["0.0044","0.043","0.0955","0.0761","0.0144","0.0311","0.0383","0.0694","0.0203","0.0249"],"x":{"__ndarray__":"o0UIUxSsyT8oyjxMKsK6P6mDfHFsMtK/JMo8TCrCuj/AJ7NiVtvZP7Ax7sTrC48/yttDV098vL+pg3xxbDLSv8Ans2JW29k/GKQA5EK7s78=","dtype":"float64","shape":[10]},"y":{"__ndarray__":"WKLlJBSSzr9MdREVFy2kv4oYlu2IZ8C/r3NDQnEM3L8FRaFfzobJP5sTn24WVbw/YOxVhw8rhD8SlhquT17WvwZFoV/Ohsm/Q21eK0lX0z8=","dtype":"float64","shape":[10]}},"selected":{"id":"8947"},"selection_policy":{"id":"8962"}},"id":"8946","type":"ColumnDataSource"},{"attributes":{"overlay":{"id":"8901"}},"id":"8899","type":"BoxZoomTool"},{"attributes":{"data_source":{"id":"8913"},"glyph":{"id":"8916"},"hover_glyph":{"id":"8918"},"muted_glyph":null,"nonselection_glyph":{"id":"8917"},"selection_glyph":null,"view":{"id":"8920"}},"id":"8919","type":"GlyphRenderer"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"8878"},{"id":"8896"},{"id":"8897"},{"id":"8898"},{"id":"8899"},{"id":"8900"}]},"id":"8902","type":"Toolbar"},{"attributes":{"line_alpha":{"value":0.2},"line_width":{"field":"edge_line_width"},"xs":{"field":"xs"},"ys":{"field":"ys"}},"id":"8922","type":"MultiLine"},{"attributes":{},"id":"8965","type":"Selection"},{"attributes":{"end":1.190096886790242,"reset_end":1.190096886790242,"reset_start":-1.091065754692661,"start":-1.091065754692661,"tags":[[["x","x",null]]]},"id":"8876","type":"Range1d"},{"attributes":{"end":1.1699134946181884,"reset_end":1.1699134946181884,"reset_start":-1.1699134946181884,"start":-1.1699134946181884,"tags":[[["y","y",null]]]},"id":"8877","type":"Range1d"},{"attributes":{"data_source":{"id":"8946"},"glyph":{"id":"8949"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"8950"},"selection_glyph":null,"view":{"id":"8952"}},"id":"8951","type":"GlyphRenderer"},{"attributes":{"data":{"edge_line_width":{"__ndarray__":"0QYa60w97D8HfML/8DQhQF8KZ+OTGzNAlnTd2vFrLkCcNoMuWgoHQLnFl0Uw3RhABNocjBmtHkBnXRVt670rQNOR9/WXRhBAVB47VqbnE0A=","dtype":"float64","shape":[10]},"end":{"__ndarray__":"AAAAAAEAAAADAAAABgAAAAEAAAADAAAAAgAAAAQAAAAGAAAAAwAAAA==","dtype":"int32","shape":[10]},"start":{"__ndarray__":"BQAAAAUAAAAFAAAABQAAAAAAAAAAAAAABQAAAAUAAAAAAAAAAQAAAA==","dtype":"int32","shape":[10]},"xs":[{"__ndarray__":"iUUC45B7zL9mQemHqeXLv4+pEkyPSsu/Cn5+L0Kqyr/QviwywgTKv+drHVQPWsm/TYVQlSmqyL//Csb1EPXHvwL9fXXFOse/UVt4FEd7xr/wJbXSlbbFv95cNLCx7MS/GgD2rJodxL+lD/rIUEnDv32LQATUb8K/p3PJXiSRwb8byJTYQa3Av8ARReNYiL+/5mvlU8irvb+rngoD0sS7vwyqtPB107m/CY7jHLTXt7+mSpeHjNG1v9zfzzD/wLO/sU2NGAymsb9EKJ99ZgGvv2hmLUfpoaq/wFXFjaAtpr9Q9mZRjKShv0iQJCRZDZq/WJaOnwKokL9Q+y9UVGR8v+CxGdt7+2Q/mBF+IxYDiT/seAeuPY2WP05DHqhDYaA/5Bgv/LOQpT9GPTbT79SqPzjYmZb7FrA/MLkTBeXNsj+KwQg1NI+1P0XxeCbpWrg/Y0hk2QMxuz/mxspNhBG+P2Q21kE1fsA/Cp2EPdv4wT9gl/AZtHjDP2YlGte//cQ/HkcBdf6Hxj+I/KXzbxfIP6NFCFMUrMk/cyIok+tFyz/wkgW09eTMPxyXoLUyic4/gJf8S1EZ0D9IrYetovDQP+yMcX+NytE/Zja6wRGn0j+4qWF0L4bTP+bmZ5fmZ9Q/6u3MKjdM1T/IvpAuITPWP35Zs6KkHNc/D740h8EI2D917BTcd/fYP7XkU6HH6Nk/0Kbx1rDc2j/BMu58M9PbP42ISZNPzNw/L6gDGgXI3T+tkRwRVMbePwFFlHg8x98/FmE1KF9l4D+bBFDMbOjgPwoNmijHbOE/Z3oTPW7y4T+uTLwJYnniP+KDlI6iAeM/BCCcyy+L4z8QIdPACRbkPwyHOW4wouQ/8VHP06Mv5T/EgZTxY77lP4IWicdwTuY/LRCtVcrf5j/FbgCccHLnP0kyg5pjBug/ulo1UaOb6D8W6BbALzLpP2DaJ+cIyuk/lTFoxi5j6j+27dddof3qP8UOd61gmes/vpRFtWw27D+mf0N1xdTsP3nPcO1qdO0/OITNHV0V7j/lnVkGnLfuP3wcFacnW+8/AAAAAAAA8D8=","dtype":"float64","shape":[100]},{"__ndarray__":"iUUC45B7zL8aJIvI6+bLv100mk6YT8u/WXYvdZa1yr8I6ko85hjKv22P7KOHecm/iWYUrHrXyL9Yb8JUvzLIv9+p9p1Vi8e/GRaxhz3hxr8LtPERdzTGv7GDuDwChcW/DIUFCN/SxL8euNhzDR7Ev+QcMoCNZsO/YrMRLV+swr+Re3d6gu/Bv3l1Y2j3L8G/FaHV9r1twL/O/JtLrFG/v94amep/wr2/VpyiyvYtvL88gbjrEJS6v4rJ2k3O9Li/RXUJ8S5Qt79qhETVMqa1v/z2i/rZ9rO/+MzfYCRCsr9dBkAIEoiwv2FGWeFFka2/2kZLNK4Hqr8lDlYJXXOmv0aceWBS1KK/hOJrcxxVnr8kGhYqIeyWv9i+48ll246/sMn8j0Znf78AiAmfsz4ov6D6RUUnOX4/aAVfCwjFjj8M+ds1MUyXP7jh1mFRS58/XB7QRPKvoz8IBZxW9cSnP9gkT+ax5Ks/7770+ZMHsD8FiLW/KyKyP6ztaUQgQrQ/6+8RiHFntj/Ajq2KH5K4PyjKPEwqwro/LKK/zJH3vD+9FjYMVjK/P/ATUIU7ucA/0er+Y/rbwT/5jyeiZwHDP28Dyj+DKcQ/K0XmPE1UxT8yVXyZxYHGP4kzjFXsscc/JeAVccHkyD8PWxnsRBrKP0CklsZ2Uss/wLuNAFeNzD+Gof6Z5crNP5dV6ZIiC88//Oum9QYn0D9PFJbR08nQP8kjQt33bdE/ZhqrGHMT0j8r+NCDRbrSPxO9sx5vYtM/IGlT6e8L1D9V/K/jx7bUP6x2yQ33YtU/LNifZ30Q1j/PIDPxWr/WP5ZQg6qPb9c/hWeQkxsh2D+WZVqs/tPYP9BK4fQ4iNk/LRclbco92j+yyiUVs/TaP1hl4+zyrNs/Judd9Ilm3D8ZUJUreCHdPzCgiZK93d0/btc6KVqb3j/P9ajvTVrfP6z96XJMDeA/A/TdhR1u4D/rXbAwms/gP2c7YXPCMeE/dYzwTZaU4T8WUV7AFfjhP0qJqspAXOI/EDXVbBfB4j9qVN6mmSbjP1TnxXjHjOM/0u2L4qDz4z8=","dtype":"float64","shape":[100]},{"__ndarray__":"iUUC45B7zL+6uJaOBOzLv96GyGb7Y8u/+6+Xa3Xjyr8LNASdcmrKvxITDvvy+Mm/EE21hfaOyb8C4vk8fSzJv+zR2yCH0ci/yRxbMRR+yL+ewnduJDLIv2jDMdi37ce/KB+Jbs6wx7/f1X0xaHvHv4rnDyGFTce/LVQ/PSUnx7/DGwyGSAjHv1E+dvvu8Ma/07t9nRjhxr9OlCJsxdjGv73HZGf118a/IVZEj6jexr98P8Hj3uzGv8yD22SYAse/EiOTEtUfx79OHejslETHv4Jy2vPXcMe/qiJqJ56kx7/ILZeH59/Hv9qTYRS0Isi/5VTJzQNtyL/kcM6z1r7Iv9jncMYsGMm/xLmwBQZ5yb+m5o1xYuHJv3xuCApCUcq/SFEgz6TIyr8Mj9XAikfLv8QnKN/zzcu/cRsYKuBbzL8WaqWhT/HMv7AT0EVCjs2/QBiYFrgyzr/Gd/0Tsd7Ov0EyAD4tks+/2SNQSpYm0L8N3O6L14fQv7xB3GPa7NC/5VQY0p5V0b+JFaPWJMLRv6mDfHFsMtK/RJ+konWm0r9YaBtqQB7Tv+fe4MfMmdO/8wL1uxoZ1L961FdGKpzUv3xTCWf7ItW/9n8JHo6t1b/rWVhr4jvWv1/h9U74zda/ShbiyM9j17+z+BzZaP3Xv5SIpn/Dmti/9MV+vN872b/KsKWPveDZvx1JG/lcidq/7I7f+L012781gvKO4OXbv/oiVLvEmdy/OHEEfmpR3b/zbAPX0QzevycWUcb6y96/1mztS+WO37+BOOyzyCrgv1MRCY3/j+C/5EBNMRf34L8yx7igD2DhvzykS9voyuG/BdgF4aI34r+LYuexPabiv89D8E25FuO/0HsgtRWJ47+PCnjnUv3jvwvw9uRwc+S/RCydrW/r5L87v2pBT2Xlv/CoX6AP4eW/Yel7yrBe5r+PgL+/Mt7mv35uKoCVX+e/J7O8C9ni57+PTnZi/Wfov7VAV4QC7+i/l4lfceh36b84KY8prwLqv5Uf5qxWj+q/r2xk+94d67+IEAoVSK7rvx4L1/mRQOy/cFzLqbzU7L8=","dtype":"float64","shape":[100]},{"__ndarray__":"iUUC45B7zL8aJIvI6+bLv100mk6YT8u/WXYvdZa1yr8I6ko85hjKv22P7KOHecm/iWYUrHrXyL9Yb8JUvzLIv9+p9p1Vi8e/GRaxhz3hxr8LtPERdzTGv7GDuDwChcW/DIUFCN/SxL8fuNhzDR7Ev+QcMoCNZsO/YrMRLV+swr+Re3d6gu/Bv3l1Y2j3L8G/FaHV9r1twL/P/JtLrFG/v98amep/wr2/V5yiyvYtvL89gbjrEJS6v4vJ2k3O9Li/RnUJ8S5Qt79qhETVMqa1v/72i/rZ9rO/+czfYCRCsr9eBkAIEoiwv2RGWeFFka2/3UZLNK4Hqr8oDlYJXXOmv0qceWBS1KK/jOJrcxxVnr8sGhYqIeyWv+i+48ll246/0Mn8j0Znf78AjAmfsz4ov3D6RUUnOX4/UAVfCwjFjj8E+ds1MUyXP6zh1mFRS58/Vh7QRPKvoz8CBZxW9cSnP9IkT+ax5Ks/6770+ZMHsD8DiLW/KyKyP6rtaUQgQrQ/5+8RiHFntj+8jq2KH5K4PyTKPEwqwro/KKK/zJH3vD+3FjYMVjK/P+4TUIU7ucA/zur+Y/rbwT/2jyeiZwHDP20Dyj+DKcQ/KUXmPE1UxT8wVXyZxYHGP4YzjFXsscc/IuAVccHkyD8MWxnsRBrKPz6klsZ2Uss/vruNAFeNzD+Cof6Z5crNP5NV6ZIiC88/+uum9QYn0D9NFJbR08nQP8cjQt33bdE/ZBqrGHMT0j8p+NCDRbrSPxG9sx5vYtM/HmlT6e8L1D9S/K/jx7bUP6p2yQ33YtU/KtifZ30Q1j/MIDPxWr/WP5NQg6qPb9c/gmeQkxsh2D+UZVqs/tPYP85K4fQ4iNk/Kxclbco92j+vyiUVs/TaP1Zl4+zyrNs/I+dd9Ilm3D8WUJUreCHdPy2giZK93d0/a9c6KVqb3j/M9ajvTVrfP6v96XJMDeA/AfTdhR1u4D/pXbAwms/gP2Y7YXPCMeE/c4zwTZaU4T8VUV7AFfjhP0iJqspAXOI/DjXVbBfB4j9oVN6mmSbjP1LnxXjHjOM/0O2L4qDz4z8=","dtype":"float64","shape":[100]},{"__ndarray__":"AAAAAAAA8D9pISWt3FvvP5SxmR5wuu4/iLBdVLob7j8+HnFOu3/tP7v60wxz5uw//UWGj+FP7D8DAIjWBrzrP9Ao2eHiKus/YMB5sXWc6j+4xmlFvxDqP9M7qZ2/h+k/tB84unYB6T9bchab5H3oP8UzREAJ/ec/92PBqeR+5z/rAo7XdgPnP6YQqsm/iuY/Jo0VgL8U5j9seND6daHlP3bS2jnjMOU/Rps0PQfD5D/b0t0E4lfkPzR51pBz7+M/VI4e4buJ4z83Erb1uibjP+MEnc5wxuI/UWbTa91o4j+FNlnNAA7iP351LvPateE/PiNT3Wtg4T/AP8eLsw3hPwjLiv6xveA/F8WdNWdw4D/rLQAx0yXgPwULZOHru98/wZdm6Z4x3z8HAgh6v6zeP9ZJSJNNLd4/L28nNUmz3T8VcqVfsj7dP4VSwhKJz9w/fhB+Ts1l3D8CrNgSfwHcPxIl0l+eots/qXtqNStJ2z/Kr6GTJfXaP3rBd3qNpto/srDs6WJd2j9zfQDipRnaP8Ans2JW29k/mK8EbHSi2T/5FPX9/27ZP+RXhBj5QNk/Wniyu18Y2T9cdn/nM/XYP+ZR65t119g//Ar22CS/2D+coZ+eQazYP8YV6OzLntg/e2fPw8OW2D+6llUjKZTYP4Kjegv8ltg/1o0+fDyf2D+0VaF16qzYPx37ovcFwNg/EH5DAo/Y2D+O3oKVhfbYP5YcYbHpGdk/JzjeVbtC2T9EMfqC+nDZP+oHtTinpNk/G7wOd8Hd2T/YTQc+SRzaPx29no0+YNo/7wnVZaGp2j9JNKrGcfjaPy48HrCvTNs/niExIlum2z+X5OIcdAXcPxyFM6D6adw/KwMjrO7T3D/FXrFAUEPdP+eX3l0fuN0/lq6qA1wy3j/OohUyBrLeP5F0H+kdN98/3iPIKKPB3z9a2If4yijgP4wN+yB7c+A/grG9DeLA4D89xM++/xDhP75FMTTUY+E/AzbibV+54T8OleJroRHiP99iMi6abOI/dJ/RtEnK4j/PSsD/ryrjP+5k/g7NjeM/0u2L4qDz4z8=","dtype":"float64","shape":[100]},{"__ndarray__":"AAAAAAAA8D9BPKJ7llrvP/QcjlhXte4/H6LDlkIQ7j+9y0I2WGvtP9GZCzeYxuw/WwwemQIi7D9ZI3pcl33rP83eH4FW2eo/tD4PB0A16j8TQ0juU5HpP+XryjaS7eg/LTmX4PpJ6D/rKq3rjabnPxvBDFhLA+c/xPu1JTNg5j/e2qhURb3lP3Be5eSBGuU/doZr1uh35D/yUjspetXjP+PDVN01M+M/Sdm38huR4j8kk2RpLO/hP3LxWkFnTeE/OPSaesyr4D9xmyQVXArgP0PO7yEs0t4/jK4p3PSP3T++1/ZYEk7cP9xJV5iEDNs/5ARLmkvL2T/UCNJeZ4rYP65V7OXXSdc/dOuZL50J1j8lyto7t8nUP77xrgomitM/Q2IWnOlK0j+yGxHwAQzRPxQ8Pg3ems8/ltKAv2EezT/y+un2jqLKPyO1ebNlJ8g/JQEw9eWsxT/83gy8DzPDP6xOEAjjucA/UKB0sr+CvD/yxhVfDJO3P0oRBBaspLI/lP5+rj1vqz/QIZBFyZehP7Ax7sTrC48/wA32c2p5cL/okD3zXr2Xv9SHJJCLq6W/CAAQksF1r79omLC/qJ60vzINDKwdgbm/QF4ajj9ivr/Sxe0yB6HBv7vKpxlFEMS/xD07e9l+xr8BH6hXxOzIv2Ru7q4FWsu/+ysOgZ3Gzb/ZqwPnRRnQv8z47EroTtG/2PxC7DWE0r/2twXLLrnTvy0qNefS7dS/d1PRQCIi1r/aM9rXHFbXv1DLT6zCidi/2xkyvhO92b9/H4ENEPDavzbcPJq3Ity/BlBlZApV3b/pevprCIfev+Bc/LCxuN+/+Xq1GQN14L8LI6P5gg3hv6kmR3jYpeG/0YWhlQM+4r+FQLJRBNbiv8NWeazabeO/jMj2pYYF5L/glSo+CJ3kv8C+FHVfNOW/KUO1SozL5b8dIwy/jmLmv55eGdJm+ea/qPXcgxSQ57896FbUlybov142h8PwvOi/CeBtUR9T6b9A5Qp+I+npvwBGXkn9fuq/SwJos6wU678jGii8Marrv4SNnmOMP+y/cFzLqbzU7L8=","dtype":"float64","shape":[100]},{"__ndarray__":"iUUC45B7zL/LN8vgv+nLvySDmq/oWsu/mCdwTwvPyr8iJUzAJ0bKv8d7LgI+wMm/hSsXFU49yb9aNAb5V73Iv0qW+61bQMi/UFH3M1nGx79xZfmKUE/Hv6rSAbNB28a/+5gQrCxqxr9nuCV2EfzFv+owQRHwkMW/hwJjfcgoxb86LYu6msPEvwmxuchmYcS/743upywCxL/vwylY7KXDvwhTa9mlTMO/ODuzK1n2wr+CfAFPBqPCv+QWVkOtUsK/YAqxCE4Fwr/zVhKf6LrBv6L8eQZ9c8G/Z/vnPgsvwb9GU1xIk+3Avz0E1yIVr8C/Tg5YzpBzwL92cd9KBjvAv7ctbZh1BcC/JIYCbr2lv78MYzdNg0a/vyPyeM487b6/bDPH8emZvr/oJiK3iky+v5XMiR4fBb6/ciT+J6fDvb+DLn/TIoi9v8bqDCGSUr2/OFmnEPUivb/ceU6iS/m8v7RMAtaV1by/u9HCq9O3vL/zCJAjBaC8v2DyaT0qjry//Y1Q+UKCvL/K20NXT3y8v8rbQ1dPfLy//I1Q+UKCvL9f8mk9Ko68v/MIkCMFoLy/udHCq9O3vL+yTALWldW8v9x5TqJL+by/NlmnEPUivb/C6gwhklK9v4Auf9MiiL2/cCT+J6fDvb+SzIkeHwW+v+MmIreKTL6/ajPH8emZvr8e8njOPO2+vwVjN02DRr+/H4YCbr2lv7+1LW2YdQXAv3Nx30oGO8C/Sg5YzpBzwL86BNciFa/Av0JTXEiT7cC/Y/vnPgsvwb+e/HkGfXPBv/BWEp/ousG/XQqxCE4Fwr/gFlZDrVLCv358AU8Go8K/NDuzK1n2wr8CU2vZpUzDv+vDKVjspcO/643upywCxL8FsbnIZmHEvzUti7qaw8S/gAJjfcgoxb/lMEER8JDFv2C4JXYR/MW/9pgQrCxqxr+j0gGzQdvGv2xl+YpQT8e/SlH3M1nGx79ClvutW0DIv1Q0BvlXvci/fSsXFU49yb/Bey4CPsDJvxwlTMAnRsq/kCdwTwvPyr8dg5qv6FrLv8I3y+C/6cu/gEUC45B7zL8=","dtype":"float64","shape":[100]},{"__ndarray__":"iUUC45B7zL+6uJaOBOzLv96GyGb7Y8u/+6+Xa3Xjyr8LNASdcmrKvxITDvvy+Mm/EE21hfaOyb8C4vk8fSzJv+zR2yCH0ci/yRxbMRR+yL+ewnduJDLIv2jDMdi37ce/KB+Jbs6wx7/f1X0xaHvHv4rnDyGFTce/LVQ/PSUnx7/DGwyGSAjHv1E+dvvu8Ma/1Lt9nRjhxr9OlCJsxdjGv73HZGf118a/IVZEj6jexr98P8Hj3uzGv8yD22SYAse/EiOTEtUfx79OHejslETHv4Jy2vPXcMe/qiJqJ56kx7/ILZeH59/Hv9uTYRS0Isi/5lTJzQNtyL/kcM6z1r7Iv9jncMYsGMm/xbmwBQZ5yb+m5o1xYuHJv31uCApCUcq/SVEgz6TIyr8Mj9XAikfLv8UnKN/zzcu/chsYKuBbzL8XaqWhT/HMv7IT0EVCjs2/QBiYFrgyzr/Gd/0Tsd7Ov0IyAD4tks+/2iNQSpYm0L8N3O6L14fQv7xB3GPa7NC/5VQY0p5V0b+KFaPWJMLRv6mDfHFsMtK/RZ+konWm0r9ZaBtqQB7Tv+je4MfMmdO/9AL1uxoZ1L961FdGKpzUv3xTCWf7ItW/9n8JHo6t1b/sWVhr4jvWv2Dh9U74zda/SxbiyM9j17+0+BzZaP3Xv5WIpn/Dmti/9cV+vN872b/LsKWPveDZvx5JG/lcidq/7o7f+L012782gvKO4OXbv/siVLvEmdy/OXEEfmpR3b/0bAPX0QzevygWUcb6y96/12ztS+WO37+BOOyzyCrgv1MRCY3/j+C/5UBNMRf34L8zx7igD2Dhvz2kS9voyuG/BtgF4aI34r+MYuexPabiv9BD8E25FuO/0XsgtRWJ47+QCnjnUv3jvwzw9uRwc+S/RSydrW/r5L88v2pBT2Xlv/CoX6AP4eW/Yul7yrBe5r+QgL+/Mt7mv39uKoCVX+e/KLO8C9ni57+PTnZi/Wfov7ZAV4QC7+i/l4lfceh36b85KY8prwLqv5Yf5qxWj+q/sGxk+94d67+JEAoVSK7rvx8L1/mRQOy/cVzLqbzU7L8=","dtype":"float64","shape":[100]},{"__ndarray__":"AAAAAAAA8D9pISWt3FvvP5SxmR5wuu4/iLBdVLob7j8+HnFOu3/tP7v60wxz5uw//UWGj+FP7D8DAIjWBrzrP9Ao2eHiKus/YMB5sXWc6j+4xmlFvxDqP9M7qZ2/h+k/tB84unYB6T9bchab5H3oP8UzREAJ/ec/92PBqeR+5z/rAo7XdgPnP6YQqsm/iuY/Jo0VgL8U5j9seND6daHlP3bS2jnjMOU/Rps0PQfD5D/b0t0E4lfkPzR51pBz7+M/VI4e4buJ4z83Erb1uibjP+IEnc5wxuI/UWbTa91o4j+FNlnNAA7iP351LvPateE/PSNT3Wtg4T/AP8eLsw3hPwjLiv6xveA/F8WdNWdw4D/rLQAx0yXgPwULZOHru98/wJdm6Z4x3z8HAgh6v6zeP9ZJSJNNLd4/Lm8nNUmz3T8UcqVfsj7dP4RSwhKJz9w/fRB+Ts1l3D8BrNgSfwHcPxEl0l+eots/qHtqNStJ2z/Kr6GTJfXaP3nBd3qNpto/sbDs6WJd2j9yfQDipRnaP8Ans2JW29k/lq8EbHSi2T/4FPX9/27ZP+RXhBj5QNk/WXiyu18Y2T9adn/nM/XYP+ZR65t119g/+wr22CS/2D+aoZ+eQazYP8QV6OzLntg/emfPw8OW2D+4llUjKZTYP4Gjegv8ltg/1o0+fDyf2D+yVaF16qzYPxv7ovcFwNg/Dn5DAo/Y2D+M3oKVhfbYP5QcYbHpGdk/JTjeVbtC2T9CMfqC+nDZP+gHtTinpNk/GbwOd8Hd2T/VTQc+SRzaPxu9no0+YNo/7QnVZaGp2j9GNKrGcfjaPys8HrCvTNs/miExIlum2z+U5OIcdAXcPxqFM6D6adw/KQMjrO7T3D/CXrFAUEPdP+WX3l0fuN0/k66qA1wy3j/LohUyBrLeP450H+kdN98/2yPIKKPB3z9Z2If4yijgP4sN+yB7c+A/gLG9DeLA4D87xM++/xDhP71FMTTUY+E/ATbibV+54T8NleJroRHiP91iMi6abOI/cp/RtEnK4j/NSsD/ryrjP+xk/g7NjeM/0O2L4qDz4z8=","dtype":"float64","shape":[100]},{"__ndarray__":"0u2L4qDz4z8ZB1NNNozjP3nTEvlUJOM/91LL5fy74j+PhXwTLlPiP0JrJoLo6eE/EgTJMSyA4T/8T2Qi+RXhPwJP+FNPq+A/IgGFxi5A4D/AzBT0LqnfP2/9EN0S0d4/VZT+Rwn43T90kd00Eh7dP8X0raMtQ9w/U75vlFtn2z8S7iIHnIraPwqEx/vurNk/OYBdclTO2D+f4uRqzO7XPzyrXeVWDtc/D9rH4fMs1j8abyNgo0rVP1hqcGBlZ9Q/0Muu4jmD0z99k97mIJ7SP2PB/2wauNE/f1USdSbR0D+hnyz+idLPP7VgFxbsAM4/Nu7kMXMtzD8hSJVRH1jKP3luKHXwgMg/Q2GenOanxj94IPfHAc3EPxqsMvdB8MI/KgRRKqcRwT9UUaTCYmK+PyYzbDjBnbo/1K35tWnVtj9iwUw7XAmzP5jbypAxc64/HGaHuj7Mpj+oRJ7nvzueP0BBiPJUoI0/AAb0v1pIRb+I/SwGiDOQv1j3Qxely5+/3EaiBE25p79kYBduM5SvvxikAORCu7O/Kv8vCSKwt79WwZkmt6i7v6TqPTwCpb+/kz0OpYHSwb9iuRooXdTDv8hoRKcT2MW/ukuLIqXdx789Yu+ZEeXJv12scA1Z7su/BSoPfXv5zb+kbWV0PAPQvwvgUaioCtG/QOxMWgIT0r85klaKSRzTv/3Rbjh+JtS/jKuVZKAx1b/iHssOsD3WvwQsDzetSte/7NJh3ZdY2L+hE8MBcGfZvxzuMqQ1d9q/YGKxxOiH279xcD5jiZncv0gY2n8XrN2/61mEGpO/3r9UNT0z/NPfv0NVAmWpdOC/wlxtb8v/4L8lsd84ZIvhv25SWcFzF+K/mkDaCPqj4r+re2IP9zDjv6AD8tRqvuO/etiIWVVM5L85+iadttrkv95ozJ+OaeW/ZSR5Yd345b/RLC3ioojmvyWC6CHfGOe/WiSrIJKp5791E3Xeuzrov3VPRltczOi/WNgel3Ne6b8hrv6RAfHpv87Q5UsGhOq/X0DUxIEX67/X/Mn8c6vrvzEGx/PcP+y/cFzLqbzU7L8=","dtype":"float64","shape":[100]}],"ys":[{"__ndarray__":"aelYBZwy779aouUkFJLuv+0rAXwt8+2/JoarCuhV7b8BseTQQ7rsv4GsrM5AIOy/pXgDBN+H679sFelwHvHqv9iCXRX/W+q/5sBg8YDI6b+az/IEpDbpv/GuE1Bopui/7F7D0s0X6L+M3wGN1Irnv80wz358/+a/tVIrqMV15r8+RRYJsO3lv20IkKE7Z+W/P5yYcWji5L+2ADB5Nl/kv9A1Vril3eO/jjsLL7Zd47/xEU/dZ9/iv/a4IcO6YuK/oDCD4K7n4b/seHM1RG7hv9+R8sF69uC/dXsAhlKA4L+uNZ2BywvgvxeBkWnLMd+/GjgGP0JP3r9jkJiD+2/dv/OJSDf3k9y/zyQWWjW727/xYAHsteXav1k+Cu14E9q/C70wXX5E2b8E3XQ8xnjYv0Se1opQsNe/ywBWSB3r1r+cBPN0LCnWv7WprRB+atW/FPCFGxKv1L+813uV6PbTv61gj34BQtO/44rA1lyQ0r9gVg+e+uHRvynDe9TaNtG/ONEFev2O0L8aAVsdxdTPv1ii5SQUks6/IoarCuhVzb9/rKzOQCDMv2wV6XAe8cq/5MBg8YDIyb/xrhNQaKbIv4jfAY3Uise/s1IrqMV1xr9tCJChO2fFv7QAMHk2X8S/jjsLL7Zdw7/1uCHDumLCv+x4czVEbsG/cnsAhlKAwL8UgZFpyzG/v2OQmIP7b72/zCQWWjW7u79ZPgrteBO6vwDddDzGeLi/ywBWSB3rtr+xqa0Qfmq1v7rXe5Xo9rO/44rA1lyQsr8mw3vU2jaxvxoBWx3F1K+/HoarCuhVrb9oFelwHvGqv/GuE1Bopqi/r1IrqMV1pr+0ADB5Nl+kv/K4IcO6YqK/cnsAhlKAoL9YkJiD+2+dv1Q+Cu14E5q/ywBWSB3rlr+113uV6PaTvybDe9TaNpG/FoarCuhVjb/prhNQaKaIv6gAMHk2X4S/bHsAhlKAgL9UPgrteBN6v63Xe5Xo9nO/FoarCuhVbb+cADB5Nl9kvz8+Cu14E1q/FoarCuhVTb8YPgrteBM6vxg+Cu14Exq/AAAAAAAAAAA=","dtype":"float64","shape":[100]},{"__ndarray__":"aelYBZwy77/GNWTabJHuv595+1GQ8O2/9rQebAZQ7b/I580oz6/svxcSCYjqD+y/5DPQiVhw678sTSMuGdHqv/NdAnUsMuq/NGZtXpKT6b/0ZWTqSvXovy9d5xhWV+i/6Ev26bO5578eMpFdZBznv84PuHNnf+a//uRqLL3i5b+osamHZUblv9F1dIVgquS/djHLJa4O5L+Y5K1oTnPjvzaPHE5B2OK/UTEX1oY94r/qyp0AH6Phv/5bsM0JCeG/j+ROPUdv4L83yfKerqvfv1C4Xwh0ed6/YJbktt5H3b9nY4Gq7hbcv2ofNuOj5tq/ZsoCYf622b9aZOcj/ofYv0bt4yujWde/MGX4eO0r1r8RzCQL3f7Uv+ohaeJx0tO/wGbF/qum0r+Omjlgi3vRv1S9xQYQUdC/Jp7T5HNOzr+an0tGEvzLvwN/8zH7qsm/XDzLpy5bx7+p19KnrAzFv+xQCjJ1v8K/G6hxRohzwL94uhHKy1G8v7Lgnxscv7e/ysKNgQEvs7+Awbb390Ktv0x1ERUXLaS/mEFXtsA4lr+AISpQnoZwv2CChnk61os/eBsSvI3tnz/wAvH01PKoPzzAjHHc9LA/CkNBVLlttT/2CZYiAeS5PwgVi9yzV74/EjIQwWhkwT+1+6oJrZvDP2DnFcim0cU/HPVQ/FUGyD/eJFymujnKP7B2N8bUa8w/lOriW6Sczj9AQK+zFGbQPz8cVfQxfdE/QQnj76mT0j9OB1mmfKnTP1wWtxeqvtQ/czb9QzLT1T+UZysrFefWP7epQc1S+tc/4/w/KusM2T8UYSZC3h7aP0rW9BQsMNs/i1yrotRA3D/O80nr11DdPx6c0O41YN4/blU/re5u3z/kD0sTgT7gP5N9ai04xeA/xvP9pJxL4T98cgV6rtHhP7b5gKxtV+I/dIlwPNrc4j+yIdQp9GHjP3fCq3S75uM/vWv3HDBr5D+GHbciUu/kP9XX6oUhc+U/pJqSRp725T/4Za5kyHnmP9A5PuCf/OY/KRZCuSR/5z8H+7nvVgHoP2jopYM2g+g/S94FdcME6T8=","dtype":"float64","shape":[100]},{"__ndarray__":"aelYBZwy778Jv/pNt5Huv6meVSC68e2/TohpfKRS7b/yezZidrTsv5l5vNEvF+y/Q4H7ytB667/ukvNNWd/qv5yupFrJROq/StQO8SCr6b/8AzIRYBLpv689DruGeui/ZIGj7pTj578dz/Grik3nv9Qm+fJnuOa/kYi5wywk5r9N9DIe2ZDlvw1qZQJt/uS/zulQcOhs5L+Sc/VnS9zjv1cHU+mVTOO/HqVp9Me94r/pTDmJ4S/iv7T+wafiouG/gboDUMsW4b9PgP6Bm4vgvyJQsj1TAeC/7FM+BuXv3r+WG4qk8t7dv0b3R1bPz9y/+uZ3G3vC27+w6hn09bbav2oCLuA/rdm/Ky6031il2L/vbazyQJ/Xv7XBFhn4mta/gSnzUn6Y1b9QpUGg05fUvyM1AgH4mNO/+dg0deub0r/VkNn8raDRv7Vc8Jc/p9C/MHnyjEBfz78AYegQoHPNv9pwwrudi8u/tqiAjTmnyb+ZCCOGc8bHv42QqaVL6cW/hUAU7MEPxL+CGGNZ1jnCv4oYlu2IZ8C/LYFaUbMxvb9gIVEVkZu5v6YRECerDLa/7FGXhgGFsr+kxM1nKAmuv3CF/V3GFqe/fOa979wyoL9Azx062LqSv6BGhC+fs3S/ENd01i6IgD+QqDRrJZiVP6jSBhqhZ6E/9LDi4rb0pz8I7y0QVHOuP4FG9FC8cbI/dEUJTJKitT9R9FX5K8y4PyZT2liJ7rs/4WGWaqoJvz9KEEWXxw7BP5nHWtIblcI/3laM5tEXxD8hvtnT6ZbFP1b9QppjEsc/iBTIOT+KyD+uA2myfP7JP8zKJQQcb8s/5Gn+Lh3czD/x4PIygEXOP/wvAxBFq88/fasX47WG0D/6qrsq+jXRP3CW7V5v49E/422tfxWP0j9TMfuM7DjTP7/g1ob04NM/JnxAbS2H1D+JAzhAlyvVP+p2vf8xztU/RNbQq/1u1j+bIXJE+g3XP+9Yocknq9c/PXxeO4ZG2D+Ji6mZFeDYP9CGguTVd9k/E27pG8cN2j9SQd4/6aHaP40AYVA8NNs/w6txTcDE2z8=","dtype":"float64","shape":[100]},{"__ndarray__":"aelYBZwy77/uDmdvu5LuvzveBqbK9e2/Vlc4qclb7b86evt4uMTsv+tGUBWXMOy/Zr02fmWf67+s3a6zIxHrv72nuLXRheq/mBtUhG/96b9AOYEf/Xfpv7MAQId69ei/8HGQu+d16L/6jHK8RPnnv8xR5omRf+e/bMDrI84I57/U2IKK+pTmvwmbq70WJOa/CAdmvSK25b/UHLKJHkvlv2rcjyIK4+S/y0X/h+V95L/4WAC6sBvkv+4Vk7hrvOO/sXy3gxZg4788jW0bsQbjv5ZHtX87sOK/uquOsLVc4r+oufmtHwziv2Jx9nd5vuG/59KEDsNz4b823qRx/Cvhv1CTVqEl5+C/N/KZnT6l4L/o+m5mR2bgv2St1fs/KuC/VhOcu1Di3797H7AYAXbfvzR/5w6RD9+/hDJCngCv3r9rOcDGT1Tev+mTYYh+/92/+kEm44yw3b+kQw7Xemfdv+SYGWRIJN2/uUFIivXm3L8iPppJgq/cvyaOD6Lufdy/vjGokzpS3L/qKGQeZizcv69zQ0JxDNy/ChJG/1vy27/6A2xVJt7bv4BJtUTQz9u/nOIhzVnH279Qz7HuwsTbv5gPZakLyNu/dqM7/TPR27/sijXqO+Dbv/fFUnAj9du/mFSTj+oP3L/QNvdHkTDcv5xsfpkXV9y/AfYohH2D3L/60vYHw7Xcv4oD6CTo7dy/sYf82uwr3b9tXzQq0W/dv8CKjxKVud2/qAkOlDgJ3r8n3K+uu17evzoCdWIeut6/5ntdr2Ab378oSWmVgoLfv/5pmBSE79+/Nm91ljIx4L84UzDvkm3gvwThfBTjrOC/nBhbBiPv4L/++crEUjThvy2FzE9yfOG/Jrpfp4HH4b/rmITLgBXiv3ohO7xvZuK/01ODeU664r/5L10DHRHjv+m1yFnbauO/peXFfInH478rv1RsJyfkv35CdSi1ieS/mm8nsTLv5L+BRmsGoFflvzTHQCj9wuW/sfGnFkox5r/7xaDRhqLmvw9EK1mzFue/7mtHrc+N57+YPfXN2wfovw25NLvXhOi/TN4FdcME6b8=","dtype":"float64","shape":[100]},{"__ndarray__":"AAAAAAAAAAC0cpItUOkUP7Ryki1Q6TQ/C8FEM3qGRz+0cpItUOlUP55pmqNGVmA/C8FEM3qGZz/TH+RioQJwP7Ryki1Q6XQ/LFmteUl3ej+eaZqjRlaAP25wFMuNxIM/C8FEM3qGhz9zWyvcC5yLP9Mf5GKhApA/0LYNeA9hkj+0cpItUOmUP39TcoNjm5c/LFmteUl3mj/Bg0MQAn2dP55pmqNGVqA/zKNAj/UCoj9ucBTLjcSjP4TPFVcPm6U/C8FEM3qGpz8FRaFfzoapP3NbK9wLnKs/UwTjqDLGrT/TH+RioQKwP7SGbRmeLLE/0LYNeA9hsj8msMR+9Z+zP7Ryki1Q6bQ/ff52hB89tj9/U3KDY5u3P7pxhCocBLk/LFmteUl3uj/aCe1w6/S7P8GDQxACfb0/4cawV40Pvz+eaZqjRlbAP2fUZ+8AKsE/zKNAj/UCwj/P1ySDJOHCP25wFMuNxMM/q20PZzGtxD+EzxVXD5vFP/mVJ5snjsY/C8FEM3qGxz+6UG0fB4TIPwVFoV/Ohsk/753g88+Oyj9zWyvcC5zLP5J9gRiCrsw/UwTjqDLGzT+t70+NHePOP9Mf5GKhAtA/HPolKVGW0D+0hm0ZnizRP5zFujOIxdE/0LYNeA9h0j9VWmbmM//SPyawxH71n9M/R7goQVRD1D+0cpItUOnUP3HfAUTpkdU/ff52hB891j/Wz/Hu8urWP39TcoNjm9c/dIn4QXFO2D+6cYQqHATZP0sMFj1kvNk/LFmteUl32j9dWErgyzTbP9oJ7XDr9Ns/p22VK6i33D/Bg0MQAn3dPyhM9x75RN4/4cawV40P3z/l82+6vtzfP55pmqNGVuA/brL/fny/4D9n1GfvACrhP4bP0vTTleE/zKNAj/UC4j86UbG+ZXHiP8/XJIMk4eI/jDeb3DFS4z9ucBTLjcTjP3qCkE44OOQ/q20PZzGt5D8DMpEUeSPlP4TPFVcPm+U/KkadLvQT5j/5lSebJ47mP+++tJypCec/C8FEM3qG5z9PnNdemQToP7pQbR8HhOg/S94FdcME6T8=","dtype":"float64","shape":[100]},{"__ndarray__":"AAAAAAAAAABMPNS4ujUHP0w81Li6NSc/1sPuD3IcOj9MPNS4ujVHPxzPZeD5IVI/1sPuD3IcWj8sfoL1IsVhP0w81Li6NWc/UJzsUQBgbT8cz2Xg+SFyPwChuILK8HU/1sPuD3Icej+eNwiI8KR+Pyx+gvUixYE//4hyHDlmhD9MPNS4ujWHPxOYp8qnM4o/UJzsUQBgjT+EpFEnYl2QPxzPZeD5IZI/8M0yVMf9kz8AobiCyvCVP05I92sD+5c/1sPuD3Icmj+bE59uFlWcP543CIjwpJ4/7hcVLgCGoD8sfoL1IsWhP4VOTJrgD6M//4hyHDlmpD+WLfV7LMilP0w81Li6Nac/ILUP0+OuqD8TmKfKpzOqPyPlm58GxKs/UJzsUQBgrT+dvZnhlAevP4SkUSdiXbA/SJ+ETMc8sT8cz2Xg+SGyP/8z9eL5DLM/8M0yVMf9sz/xnB40YvS0PwChuILK8LU/H9oAQADztj9OSPdrA/u3P4rrmwbUCLk/1sPuD3Icuj8x0e+H3TW7P5sTn24WVbw/F4v8wxx6vT+eNwiI8KS+PzIZwrqR1b8/7hcVLgCGwD/IPSA2HiTBPyx+gvUixcE/FNk7bA5pwj+FTkya4A/DP3/es3+ZucM//4hyHDlmxD8HTohwvxXFP5Yt9XssyMU/rye5PoB9xj9MPNS4ujXHP3JrRurb8Mc/ILUP0+OuyD9VGTBz0m/JPxOYp8qnM8o/VjF22WP6yj8j5ZufBsTLP3azGB2QkMw/UJzsUQBgzT+0nxc+VzLOP529meGUB88/EPZyPLnfzz+EpFEnYl3QP0RbFQxbzNA/SJ+ETMc80T+PcJ/opq7RPxzPZeD5IdI/67rXM8CW0j//M/Xi+QzTP1U6vu2mhNM/8M0yVMf90z/O7lIWW3jUP/GcHjRi9NQ/V9iVrdxx1T8AobiCyvDVP+/2hrMrcdY/H9oAQADz1j+USiYoSHbXP05I92sD+9c/SdNzCzKB2D+K65sG1AjZPw6Rb13pkdk/1sPuD3Ic2j/igxkebqjaPzHR74fdNds/w6txTcDE2z8=","dtype":"float64","shape":[100]},{"__ndarray__":"aelYBZwy778IOh6JQ5Huv6WK4wzr7+2/RNuokJJO7b/iK24UOq3sv4B8M5jhC+y/H834G4lq67+9Hb6fMMnqv1tugyPYJ+q/+L5Ip3+G6b+XDw4rJ+XovzVg067OQ+i/07CYMnai579zAV62HQHnvw9SIzrFX+a/r6LovWy+5b9L861BFB3lv+pDc8W7e+S/iJQ4SWPa478n5f3MCjnjv8Q1w1Cyl+K/Y4aI1Fn24b8C101YAVXhv58nE9yos+C/PnjYX1AS4L+0kTvH7+Hev/Myxs4+n92/MdRQ1o1c3L9sddvd3Bnbv6oWZuUr19m/5rfw7HqU2L8iWXv0yVHXv1z6BfwYD9a/m5uQA2jM1L/YPBsLt4nTvxLepRIGR9K/UH8wGlUE0b8aQXZDSIPPv5GDi1Lm/cy/B8agYYR4yr+ACLZwIvPHv/tKy3/AbcW/c43gjl7owr/sz/Wd/GLAv9AkFlo1u7u/vKlAeHGwtr+kLmuWraWxvzxnK2nTNam/UOIAS5dAnr8A7FWHDyuEv2DsVYcPK4Q/kOIAS5dAnj9cZytp0zWpP7Aua5atpbE/zKlAeHGwtj/SJBZaNbu7P/bP9Z38YsA/eY3gjl7owj/9Sst/wG3FP4oItnAi88c/DsagYYR4yj+Xg4tS5v3MPxxBdkNIg88/VX8wGlUE0T8W3qUSBkfSP9g8Gwu3idM/npuQA2jM1D9g+gX8GA/WPyZZe/TJUdc/57fw7HqU2D+uFmblK9fZP3B1293cGds/MdRQ1o1c3D/2MsbOPp/dP7mRO8fv4d4/QHjYX1AS4D+gJxPcqLPgPwLXTVgBVeE/ZIaI1Fn24T/FNcNQspfiPynl/cwKOeM/ipQ4SWPa4z/sQ3PFu3vkP03zrUEUHeU/r6LovWy+5T8RUiM6xV/mP3MBXrYdAec/1rCYMnai5z82YNOuzkPoP5kPDisn5eg/+r5Ip3+G6T9bboMj2CfqP78dvp8wyeo/H834G4lq6z+CfDOY4QvsP+QrbhQ6rew/RNuokJJO7T+niuMM6+/tPwg6HolDke4/aelYBZwy7z8=","dtype":"float64","shape":[100]},{"__ndarray__":"aelYBZwy77+rhdD7cJLuvzG5rNeg9O2//oPtmCtZ7b8Q5pI/EcDsv2nfnMtRKey/B3ALPe2U67/ql96T4wLrvxRXFtA0c+q/gq2y8eDl6b84m7P451rpvzMgGeVJ0ui/dDzjtgZM6L/77xFuHsjnv8Y6pQqRRue/2RydjF7H5r8vlvnzhkrmv82mukAK0OW/sE7gcuhX5b/ajWqKIeLkv0lkWYe1buS//dGsaaT947/51mQx7o7jvzhzgd6SIuO/v6YCcZK44r+Jcejo7FDiv5zTMkai6+G/9MzhiLKI4b+RXfWwHSjhv3SFbb7jyeC/nURKsQRu4L8Lm4uJgBTgv3wRY46uet+/cxt41BHR3r/zU1blKizev/26/cD5i92/lFBuZ37w3L+3FKjYuFncv2QHqxSpx9u/nCh3G086279ieAztqrHav7T2aom8Ldq/j6OS8IOu2b/3foMiATTZv+yIPR80vti/asHA5hxN2L9yKA15u+DXvwu+ItYPede/LIIB/hkW17/YdKnw2bfWvxKWGq5PXta/1uVUNnsJ1r8mZFiJXLnVvwIRJafzbdW/aOy6j0An1b9c9hlDQ+XUv9guQsH7p9S/4pUzCmpv1L94K+4djjvUv5jvcfxnDNS/ReK+pffh0798A9UZPbzTv0BTtFg4m9O/j9FcYul+079qfs42UGfTv9BZCdZsVNO/wmMNQD9G078/nNp0xzzTv0gDcXQFONO/3JjQPvk307/8XPnTojzTv6hP6zMCRtO/3nCmXhdU07+hwCpU4mbTv+8+eBRjftO/yeuOn5ma078vx271hbvTvx/RFxYo4dO/nAmKAYAL1L+kcMW3jTrUvzgGyjhRbtS/VsqXhMqm1L8CvS6b+ePUvzfejnzeJdW/+i24KHls1b9GrKqfybfVvx9ZZuHPB9a/hTTr7Ytc1r90PjnF/bXWv/B2UGclFNe/990w1AJ317+Jc9oLlt7Xv6k3TQ7fSti/USqJ29272L+IS45zkjHZv0mbXNb8q9m/lRn0Ax0r2r9uxlT88q7av9Ghfr9+N9u/v6txTcDE278=","dtype":"float64","shape":[100]},{"__ndarray__":"AAAAAAAAAAC1cpItUOkUv7Vyki1Q6TS/DMFEM3qGR7+1cpItUOlUv55pmqNGVmC/DMFEM3qGZ7/UH+RioQJwv7Vyki1Q6XS/LVmteUl3er+eaZqjRlaAv29wFMuNxIO/DMFEM3qGh790WyvcC5yLv9Qf5GKhApC/0bYNeA9hkr+1cpItUOmUv4BTcoNjm5e/LVmteUl3mr/Cg0MQAn2dv55pmqNGVqC/zaNAj/UCor9vcBTLjcSjv4XPFVcPm6W/DMFEM3qGp78GRaFfzoapv3RbK9wLnKu/VATjqDLGrb/UH+RioQKwv7WGbRmeLLG/0bYNeA9hsr8msMR+9Z+zv7Vyki1Q6bS/fv52hB89tr+AU3KDY5u3v7txhCocBLm/LVmteUl3ur/bCe1w6/S7v8KDQxACfb2/4sawV40Pv7+eaZqjRlbAv2jUZ+8AKsG/zaNAj/UCwr/Q1ySDJOHCv29wFMuNxMO/rG0PZzGtxL+FzxVXD5vFv/qVJ5snjsa/DMFEM3qGx7+7UG0fB4TIvwZFoV/Ohsm/8Z3g88+Oyr90WyvcC5zLv5N9gRiCrsy/VATjqDLGzb+u70+NHePOv9Qf5GKhAtC/HfolKVGW0L+1hm0ZnizRv53FujOIxdG/0bYNeA9h0r9VWmbmM//SvyawxH71n9O/SLgoQVRD1L+1cpItUOnUv3HfAUTpkdW/fv52hB891r/Xz/Hu8urWv4BTcoNjm9e/dYn4QXFO2L+7cYQqHATZv0wMFj1kvNm/LVmteUl32r9eWErgyzTbv9sJ7XDr9Nu/qG2VK6i33L/Cg0MQAn3dvypM9x75RN6/4sawV40P37/m82+6vtzfv55pmqNGVuC/b7L/fny/4L9o1GfvACrhv4fP0vTTleG/zaNAj/UC4r87UbG+ZXHiv9DXJIMk4eK/jTeb3DFS479vcBTLjcTjv3uCkE44OOS/rG0PZzGt5L8EMpEUeSPlv4XPFVcPm+W/K0adLvQT5r/6lSebJ47mv/C+tJypCee/DMFEM3qG579QnNdemQTov7tQbR8HhOi/TN4FdcME6b8=","dtype":"float64","shape":[100]},{"__ndarray__":"S94FdcME6T8LNFj2Y4ToP5Ipg7oMBug/476Gwb2J5z/882ILdw/nP+DIF5g4l+Y/jD2lZwIh5j8BUgt61KzlPz8GSs+uOuU/RVphZ5HK5D8WTlFCfFzkP7DhGWBv8OM/EhW7wGqG4z8+6DRkbh7jPzJbh0p6uOI/8G2yc45U4j91ILbfqvLhP8Vyko7PkuE/3mRHgPw04T/A9tS0MdngP2soOyxvf+A/3/l55rQn4D841iLHBaTfP0P4Akey/N4/4VmUTG9Z3j8Q+9bXPLrdP9XbyugaH90/KvxvfwmI3D8QXMabCPXbP4j7zT0YZts/lNqGZTjb2j8v+fASaVTaP1xXDEaq0dk/H/XY/vtS2T9z0lY9XtjYP1fvhQHRYdg/z0tmS1Tv1z/a5/ca6IDXP3TDOnCMFtc/oN4uS0Gw1j9hOdSrBk7WP7TTKpLc79U/l60y/sKV1T8Nx+vvuT/VPxYgVmfB7dQ/r7hxZNmf1D/bkD7nAVbUP5qovO86ENQ/7P/rfYTO0z/NlsyR3pDTP0NtXitJV9M/SoOhSsQh0z/i2JXvT/DSPw5uOxrswtI/y0KSypiZ0j8bV5oAVnTSP/yqU7wjU9I/cD6+/QE20j91EdrE8BzSPw0kpxHwB9I/N3Yl5P/20T/yB1U8IOrRP0DZNRpR4dE/IerHfZLc0T+TOgtn5NvRP5jK/9VG39E/Lpqlyrnm0T9XqfxEPfLRPxL4BEXRAdI/Xoa+ynUV0j8+VCnWKi3SP69hRWfwSNI/sq4SfsZo0j9HO5EarYzSP28HwTyktNI/KROi5Kvg0j90XjQSxBDTP1Lpd8XsRNM/wbNs/iV90z/CvRK9b7nTP1gHagHK+dM/fZByyzQ+1D82WSwbsIbUP4Bhl/A709Q/XamzS9gj1T/LMIEshXjVP8z3/5JC0dU/X/4vfxAu1j+DRBHx7o7WPzzKo+jd89Y/g4/nZd1c1z9flNxo7cnXP83YgvENO9g/y1za/z6w2D9dIOOTgCnZP4Ejna3Sptk/NmYITTUo2j9/6CRyqK3aP1iq8hwsN9s/w6txTcDE2z8=","dtype":"float64","shape":[100]}]},"selected":{"id":"8965"},"selection_policy":{"id":"8966"}},"id":"8914","type":"ColumnDataSource"},{"attributes":{},"id":"8960","type":"UnionRenderers"},{"attributes":{"callback":null,"renderers":[{"id":"8926"}],"tooltips":[["Item","@index_hover"]]},"id":"8878","type":"HoverTool"},{"attributes":{"data":{"index":{"__ndarray__":"AAAAAAEAAAACAAAAAwAAAAQAAAAFAAAABgAAAA==","dtype":"int32","shape":[7]},"index_hover":["other vegetables","rolls/buns","sausage","soda","tropical fruit","whole milk","yogurt"]},"selected":{"id":"8963"},"selection_policy":{"id":"8964"}},"id":"8913","type":"ColumnDataSource"},{"attributes":{"data":{"index":["other vegetables","rolls/buns","sausage","soda","tropical fruit","whole milk","yogurt"],"x":{"__ndarray__":"AAAAAAAA8D/S7YvioPPjP4BFAuOQe8y/cFzLqbzU7L9xXMupvNTsv4lFAuOQe8y/0O2L4qDz4z8=","dtype":"float64","shape":[7]},"y":{"__ndarray__":"AAAAAAAAAABL3gV1wwTpP2npWAWcMu8/w6txTcDE2z+/q3FNwMTbv2npWAWcMu+/TN4FdcME6b8=","dtype":"float64","shape":[7]}},"selected":{"id":"8940"},"selection_policy":{"id":"8960"}},"id":"8939","type":"ColumnDataSource"},{"attributes":{},"id":"8897","type":"PanTool"},{"attributes":{},"id":"8898","type":"WheelZoomTool"},{"attributes":{"text":{"field":"weight"},"text_align":"center","text_baseline":"middle","text_color":{"value":"black"},"text_font_size":{"value":"8pt"},"text_font_style":"bold","x":{"field":"x"},"y":{"field":"y"}},"id":"8949","type":"Text"},{"attributes":{"axis_label":"x","bounds":"auto","formatter":{"id":"8909"},"major_label_orientation":"horizontal","ticker":{"id":"8889"}},"id":"8888","type":"LinearAxis"},{"attributes":{"fill_alpha":{"value":0.5},"fill_color":{"value":"#33D1FF"},"line_alpha":{"value":0.5},"size":{"units":"screen","value":50}},"id":"8916","type":"Circle"},{"attributes":{},"id":"8966","type":"UnionRenderers"},{"attributes":{},"id":"8886","type":"LinearScale"},{"attributes":{"data_source":{"id":"8914"},"glyph":{"id":"8921"},"hover_glyph":{"id":"8923"},"muted_glyph":null,"nonselection_glyph":{"id":"8922"},"selection_glyph":null,"view":{"id":"8925"}},"id":"8924","type":"GlyphRenderer"},{"attributes":{},"id":"8947","type":"Selection"},{"attributes":{"source":{"id":"8946"}},"id":"8952","type":"CDSView"},{"attributes":{"line_alpha":{"value":0.3},"line_width":{"field":"edge_line_width"},"xs":{"field":"xs"},"ys":{"field":"ys"}},"id":"8921","type":"MultiLine"},{"attributes":{"axis_label":"y","bounds":"auto","formatter":{"id":"8911"},"major_label_orientation":"horizontal","ticker":{"id":"8893"}},"id":"8892","type":"LinearAxis"},{"attributes":{"edge_renderer":{"id":"8924"},"inspection_policy":{"id":"8937"},"layout_provider":{"id":"8915"},"node_renderer":{"id":"8919"},"selection_policy":{"id":"8935"}},"id":"8926","type":"GraphRenderer"},{"attributes":{},"id":"8884","type":"LinearScale"},{"attributes":{"source":{"id":"8914"}},"id":"8925","type":"CDSView"},{"attributes":{"text":{"field":"weight"},"text_align":"center","text_alpha":{"value":0.1},"text_baseline":"middle","text_color":{"value":"black"},"text_font_size":{"value":"8pt"},"text_font_style":"bold","x":{"field":"x"},"y":{"field":"y"}},"id":"8950","type":"Text"},{"attributes":{},"id":"8937","type":"NodesAndLinkedEdges"}],"root_ids":["8874"]},"title":"Bokeh Application","version":"2.0.2"}}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('9263').textContent;
+                  var render_items = [{"docid":"c04e87fd-0eda-4d18-a8f6-10125b7e490b","root_ids":["8874"],"roots":{"8874":"2a685de2-1179-487d-9f67-b48b6201455f"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        clearInterval(timer);
+                        embed_document(root);
+                      } else {
+                        attempts++;
+                        if (attempts > 100) {
+                          clearInterval(timer);
+                          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        }
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>
