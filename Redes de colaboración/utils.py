@@ -102,8 +102,7 @@ def draw_graph(df, title='', layout='random', k=None, name=None, bundle=True, wi
     
     return graph
 
-def draw_communities(df_graph, df_groups, title='', name=None, bundle=True,
-                     layout='blobs', cluster_std=0.1, centers=None, random_state=42,
+def draw_communities(df_graph, df_groups, title='', name=None, bundle=True, layout='blobs', cluster_std=0.1, centers=None, random_state=42,
                      width=800, height=800, directed=False, labels=False):
 
     """
@@ -164,10 +163,10 @@ def draw_communities(df_graph, df_groups, title='', name=None, bundle=True,
     random_state: int, default=42
         Semilla a usar a la hora de hacer los 'blobs'
 
-    width: int, default=1000
+    width: int, default=800
         Ancho en pixeles que tendrá la gráfica.
 
-    height: int, default=1000
+    height: int, default=800
         Altura en pixeles que tendrá la gráfica.
 
     directed: bool, default=False
